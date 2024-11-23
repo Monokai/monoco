@@ -181,3 +181,7 @@ export function addCorners(element:HTMLElement, options:BackgroundOptions & Elem
 export function draw(element?:HTMLElement) {
 	ElementManager.draw(element);
 }
+
+export function untrack(element:HTMLElement) {
+	ElementManager.untrack(element);
+}

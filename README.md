@@ -16,18 +16,21 @@ addCorners(element, {
 
 // use background svg
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: 32,
 })
 
 // multi-radius (top left, top right, bottom right, bottom left)
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: [32, 4, 8, 16],
 })
 
 // offset
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: 32,
   offset: 16
@@ -35,6 +38,7 @@ addCorners(element, {
 
 // multi-offset (top, right, bottom, left)
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: 32,
   offset: [16, 4, 2, 8]
@@ -42,6 +46,7 @@ addCorners(element, {
 
 // border
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: 32,
   border: [4, '#f00']
@@ -49,6 +54,7 @@ addCorners(element, {
 
 // multi-border
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: 32,
   border: [
@@ -61,6 +67,7 @@ addCorners(element, {
 
 // mode (squircle, figma-squircle, round, flat)
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: 32,
   mode: 'squircle'
@@ -68,6 +75,7 @@ addCorners(element, {
 
 // observe (default: true) redraws on resize
 addCorners(element, {
+  color: '#f00',
   smoothing: 1,
   radius: 32,
   observe: false
