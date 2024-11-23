@@ -7,13 +7,15 @@
 	<style>
 		body {
 			margin: 0;
-			padding: 0;
+			padding: 5%;
 		}
 
 		.wrapper {
-			background-color: #ccc;
+			background-color: #ddd;
 			position: relative;
-			display: flex;
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-gap: 10%;
 			width: 100%;
 			height: 100%;
 			justify-content: center;
@@ -21,15 +23,24 @@
 		}
 
 		.block {
-			width: 50%;
-			height: 50%;
-/*			background-color: #aaa;*/
-			margin: 10%;
-			filter: drop-shadow(0 0 16px #000);
+			width: 100%;
+			height: 100%;
+
+			&:nth-child(n+4) {
+				filter: drop-shadow(0 0 16px #000);
+			}
+
+			&:nth-child(2n+1) {
+				background-color: #999;
+			}
 		}
 	</style>
 	<body>
 		<div class="wrapper">
+			<div class="block"></div>
+			<div class="block"></div>
+			<div class="block"></div>
+			<div class="block"></div>
 			<div class="block"></div>
 			<div class="block"></div>
 		</div>
@@ -38,12 +49,19 @@
 			const blocks = [...document.querySelectorAll('.block')]
 			const num = blocks.length;
 
+			const lerp = (a, b, x) => a + (b - a) * x;
+
 			blocks.forEach((el, i) => {
+				const factor = (i + 1) / num;
+				const isClipped = i % 2 === 0;
+
 				addCorners(el, {
 					isRounded: true,
+					clip: isClipped,
 					color: '#888',
-					radius: [32 * (i + 1) / num, 16 * (i + 1) / num, 8 * (i + 1) / num, 4 * (i + 1) / num],
-					border: [[4, '#f48'], [8, '#48f'], [4, '#3f8']]
+					radius: [lerp(32, 64, factor), lerp(16, 48, factor), lerp(2, 80, factor), lerp(128, 2, factor)],
+					border: isClipped ? undefined : [[lerp(4, 16, factor) , '#f48'], [lerp(16, 8, factor), '#48f'], [lerp(16, 4, factor), '#3f8']],
+					type: ['squircle', 'figma-squircle', 'round', 'flat'][i % 4]
 				});
 			});
 
