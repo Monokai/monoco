@@ -1,0 +1,5 @@
+node_modules/
+
+# Ignore Sublime Text files
+*.sublime-project
+*.sublime-workspace

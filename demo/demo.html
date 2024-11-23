@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>monoco</title>
+		<script src="../dist/umd/index.js"></script>
+	</head>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.wrapper {
+			background-color: #ccc;
+			position: relative;
+			display: flex;
+			width: 100%;
+			height: 100%;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.block {
+			width: 50%;
+			height: 50%;
+/*			background-color: #aaa;*/
+			margin: 10%;
+			filter: drop-shadow(0 0 16px #000);
+		}
+	</style>
+	<body>
+		<div class="wrapper">
+			<div class="block"></div>
+			<div class="block"></div>
+		</div>
+		<script>
+			const { addCorners, draw } = window.monoco;
+			const blocks = [...document.querySelectorAll('.block')]
+			const num = blocks.length;
+
+			blocks.forEach((el, i) => {
+				addCorners(el, {
+					isRounded: true,
+					color: '#888',
+					radius: [32 * (i + 1) / num, 16 * (i + 1) / num, 8 * (i + 1) / num, 4 * (i + 1) / num],
+					border: [[4, '#f48'], [8, '#48f'], [4, '#3f8']]
+				});
+			});
+
+			// redraw block
+			// draw(blocks[0]);
+
+			// redraw all blocks
+			// draw();
+
+		</script>
+	</body>
+</html>
