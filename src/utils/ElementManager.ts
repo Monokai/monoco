@@ -10,9 +10,9 @@ export type RedrawOptions = {
 }
 
 export type ElementOptions = {
-	observe:boolean,
-	track:boolean,
-	draw:boolean,
+	observe?:boolean,
+	track?:boolean,
+	draw?:boolean,
 	onResize?:(rect:DOMRect, element:HTMLElement) => void
 };
 

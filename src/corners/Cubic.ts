@@ -12,18 +12,18 @@ export function createPath({
 	smoothing:number,
 }) {
 	const [ot,,, ol] = offsets;
-	const [rt, rr, rb, rl] = radii;
-	const [ft, fr, fb, fl] = radii.map(r => r * (smoothing * 0.5 - 0.0))
+	const [rtl, rtr, rbr, rbl] = radii;
+	const [ftl, ftr, fbr, fbl] = radii.map(r => r * (smoothing * 0.5 - 0.0))
 
 	return [
-		['M', ol, ot + rt],
-		['C', ol, ot + ft, ol + ft, ot, ol + rt, ot],
-		['L', width + ol - rr, ot],
-		['C', width + ol - fr, ot, width + ol, ot + fr, width + ol, ot + rr],
-		['L', width + ol, height - rb + ot],
-		['C', width + ol, height - fb + ot, width - fb + ol, height + ot, width - rb + ol, height + ot],
-		['L', ol + rl, height + ot],
-		['C', ol + fl, height + ot, ol, height - fl + ot, ol, height - rl + ot],
+		['M', ol, ot + rtl],
+		['C', ol, ot + ftl, ol + ftl, ot, ol + rtl, ot],
+		['L', width + ol - rtr, ot],
+		['C', width + ol - ftr, ot, width + ol, ot + ftr, width + ol, ot + rtr],
+		['L', width + ol, height - rbr + ot],
+		['C', width + ol, height - fbr + ot, width - fbr + ol, height + ot, width - rbr + ol, height + ot],
+		['L', ol + rbl, height + ot],
+		['C', ol + fbl, height + ot, ol, height - fbl + ot, ol, height - rbl + ot],
 		['Z']
 	];
 }

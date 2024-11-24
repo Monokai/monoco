@@ -73,7 +73,7 @@ addCorners(element, {
   mode: 'squircle'
 })
 
-// observe (default: true) redraws on resize
+// observe (default: true) redraws when element trigger resize observer
 addCorners(element, {
   color: '#f00',
   smoothing: 1,

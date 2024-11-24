@@ -1,1 +1,0 @@
-function t(t){var i=t.width,r=t.height,e=t.radii,A=t.offsets,L=A[0],f=A[3],h=e[0],n=e[1],o=e[2],a=e[3];return[["M",f+a,L],["L",i-n+f,L],["A",n,n,0,0,1,i+f,L+n],["L",i+f,r-o+L],["A",o,o,0,0,1,i-o+f,r+L],["L",f+a,r+L],["A",a,a,0,0,1,f,r-a+L],["L",f,L+h],["A",h,h,0,0,1,f+h,L],["Z"]]}export{t as createPath};

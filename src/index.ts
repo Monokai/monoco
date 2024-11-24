@@ -13,8 +13,8 @@ export enum CornerType {
 }
 
 export type DrawOptions = {
-	width:number,
-	height:number,
+	width?:number,
+	height?:number,
 	smoothing?:number,
 	radius?:number | number[],
 	offset?:number | number[],
@@ -162,8 +162,8 @@ export function addCorners(element:HTMLElement, options:BackgroundOptions & Elem
 		const redrawOptions = {...options, ...drawOptions};
 
 		if (redrawOptions.isRounded) {
-			redrawOptions.width = Math.round(redrawOptions.width);
-			redrawOptions.height = Math.round(redrawOptions.height);
+			redrawOptions.width = redrawOptions.width ? Math.round(redrawOptions.width) : undefined;
+			redrawOptions.height = redrawOptions.height ? Math.round(redrawOptions.height) : undefined;
 		}
 
 		if (options.clip) {

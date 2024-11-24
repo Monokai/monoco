@@ -10,18 +10,18 @@ export function createPath({
 	offsets:number[]
 }) {
 	const [ot,,, ol] = offsets;
-	const [rt, rr, rb, rl] = radii;
+	const [rtl, rtr, rbr, rbl] = radii;
 
 	return [
-		['M', ol + rl, ot],
-		['L', width - rr + ol, ot],
-		['A', rr, rr, 0, 0, 1, width + ol, ot + rr],
-		['L', width + ol, height - rb + ot],
-		['A', rb, rb, 0, 0, 1, width - rb + ol, height + ot],
-		['L', ol + rl, height + ot],
-		['A', rl, rl, 0, 0, 1, ol, height - rl + ot],
-		['L', ol, ot + rt],
-		['A', rt, rt, 0, 0, 1, ol + rt, ot],
+		['M', ol + rbl, ot],
+		['L', width - rtr + ol, ot],
+		['A', rtr, rtr, 0, 0, 1, width + ol, ot + rtr],
+		['L', width + ol, height - rbr + ot],
+		['A', rbr, rbr, 0, 0, 1, width - rbr + ol, height + ot],
+		['L', ol + rbl, height + ot],
+		['A', rbl, rbl, 0, 0, 1, ol, height - rbl + ot],
+		['L', ol, ot + rtl],
+		['A', rtl, rtl, 0, 0, 1, ol + rtl, ot],
 		['Z']
 	];
 }
