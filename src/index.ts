@@ -8,8 +8,8 @@ import type { ElementOptions, RedrawOptions } from './utils/ElementManager';
 export enum CornerType {
 	Squircle = 'squircle',
 	FigmaSquircle = 'figma-squircle',
-	Round = 'round',
-	Flat = 'flat'
+	Flat = 'flat',
+	Round = 'round'
 }
 
 export type DrawOptions = {
@@ -41,7 +41,10 @@ function createBackground(options:BackgroundOptions) {
 		offset:offsetOrArray = 0,
 		strokeDrawType = 0,
 		color,
+		clip,
 		clipID,
+		width,
+		height
 	} = options
 
 	const paths:string[] = [];
@@ -61,14 +64,18 @@ function createBackground(options:BackgroundOptions) {
 
 			borderPaths.push(`<path d="${createPath({
 				...options,
-				offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + borderRadius + size * 0.5),
+				offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + borderRadius + size * 0.5)
 			})}" fill="none" stroke="${borderColor}" stroke-width="${strokeWidth}" />`);
 
 			borderRadius += size;
 		}
 
 		if (color) {
-			paths.push(`<path d="${clipPath}" fill="${color}" />`);
+			if (clip) {
+				paths.push(`<rect width="${width}" height="${height}" fill="${color}" />`);
+			} else {
+				paths.push(`<path d="${clipPath}" fill="${color}" />`);
+			}
 		}
 
 		paths.push(...borderPaths.reverse());
@@ -168,7 +175,9 @@ export function addCorners(element:HTMLElement, options:BackgroundOptions & Elem
 
 		if (options.clip) {
 			element.style.clipPath = `path('${createPath(redrawOptions)}')`;
-		} else if (options.color || options.border) {
+		}
+
+		if (options.color || options.border) {
 			element.style.backgroundImage = createBackground(redrawOptions);
 		}
 	}
@@ -182,6 +191,6 @@ export function draw(element?:HTMLElement) {
 	ElementManager.draw(element);
 }
 
-export function untrack(element:HTMLElement) {
-	ElementManager.untrack(element);
+export function unobserve(element:HTMLElement) {
+	ElementManager.unobserve(element);
 }

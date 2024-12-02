@@ -11,7 +11,6 @@ export type RedrawOptions = {
 
 export type ElementOptions = {
 	observe?:boolean,
-	track?:boolean,
 	draw?:boolean,
 	onResize?:(rect:DOMRect, element:HTMLElement) => void
 };
@@ -24,16 +23,13 @@ export default new class ElementManager {
 	}
 
 	addElement(element:HTMLElement, options:ElementOptions, drawFunk:(drawOptions:RedrawOptions) => void) {
-		this.untrack(element);
+		this.unobserve(element);
 
 		const {
-			track = true,
 			observe = true,
 			draw = true,
 			onResize
 		} = options;
-
-		let observer;
 
 		if (observe) {
 			let previousW:number | null = null;
@@ -62,12 +58,10 @@ export default new class ElementManager {
 				}
 			};
 
-			observer = new ResizeObserver(onResizeFunk);
+			const observer = new ResizeObserver(onResizeFunk);
 
 			observer.observe(element);
-		}
 
-		if (track) {
 			this.elements.set(element, {
 				draw: drawFunk,
 				element,
@@ -86,7 +80,7 @@ export default new class ElementManager {
 		}
 	}
 
-	untrack(element:HTMLElement) {
+	unobserve(element:HTMLElement) {
 		const funk = (el:HTMLElement) => {
 			const specs:ElementSpecs = this.elements.get(el);
 
@@ -94,6 +88,7 @@ export default new class ElementManager {
 				const { observer } = specs;
 
 				observer?.disconnect();
+
 				this.elements.delete(element);
 			}
 		}

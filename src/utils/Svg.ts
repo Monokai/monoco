@@ -1,11 +1,11 @@
 function encode(content:string) {
 	return encodeURIComponent(content)
-			.replace(/%20/g, ' ')
-			.replace(/%3D/g, '=')
-			.replace(/%3A/g, ':')
-			.replace(/%2F/g, '/')
-			.replace(/%2C/g, ',')
-			.replace(/%3B/g, ';')
+		.replace(/%20/g, ' ')
+		.replace(/%3D/g, '=')
+		.replace(/%3A/g, ':')
+		.replace(/%2F/g, '/')
+		.replace(/%2C/g, ',')
+		.replace(/%3B/g, ';')
 }
 
 export function createSVG(content:string) {
@@ -14,9 +14,9 @@ export function createSVG(content:string) {
 
 export function createSVGDatURI(paths:string[], clipPath:string, id:string = 'c') {
 	return `url('data:image/svg+xml,${
-		encode(createSVG([
+		encode(createSVG((clipPath ? [
 			`<defs><clipPath id="${id}"><path d="${clipPath}" /></clipPath></defs>`,
 			`<g clip-path="url(#${id})">${paths.join('')}</g>`
-		].join('')))
+		] : paths).join('')))
 	}')`
 }

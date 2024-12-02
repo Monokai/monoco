@@ -3,7 +3,7 @@
 Custom corners for html elements.
 
 ```ts
-import { addCorners, draw } from '@monokai/monoco/source'
+import { addCorners, draw, unobserve } from '@monokai/monoco/source'
 
 const element = document.getElementById('element')
 
@@ -73,13 +73,16 @@ addCorners(element, {
   mode: 'squircle'
 })
 
-// observe (default: true) redraws when element trigger resize observer
+// observe (default: true) redraws when element triggers resize observer
 addCorners(element, {
   color: '#f00',
   smoothing: 1,
   radius: 32,
   observe: false
 })
+
+// unobserve element
+unobserve(element)
 
 // manual redraw corners on element
 draw(element)

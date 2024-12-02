@@ -1,6 +1,4 @@
 import typescript from '@rollup/plugin-typescript';
-// import typescriptEngine from 'typescript';
-// import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import { dts } from "rollup-plugin-dts";
 import terser from '@rollup/plugin-terser';
@@ -8,6 +6,17 @@ import del from 'rollup-plugin-delete';
 
 const dist = './dist';
 const name = 'monoco';
+
+const plugins = [
+	commonjs(),
+	typescript(),
+	terser({
+		compress: {
+			drop_console: true,
+			passes: 2
+		}
+	})
+]
 
 export default [
 	{
@@ -20,9 +29,7 @@ export default [
 			},
 			{
 				format: 'esm',
-				// dir: `${dist}`,
 				file: `${dist}/index.esm.js`
-				// preserveModules: true
 			},
 			{
 				file: `${dist}/index.umd.js`,
@@ -32,39 +39,19 @@ export default [
 			}
 		],
 		plugins: [
-				commonjs(),
-				typescript(),
-				// dts(),
-				// babel({
-				// 	exclude: 'node_modules/**',
-				// 	presets: [
-				// 		[
-				// 			'@babel/env',
-				// 			{
-				// 				modules: false,
-				// 				corejs: 3,
-				// 				debug: true,
-				// 				useBuiltIns: 'usage'
-				// 			}
-				// 		]
-				// 	]
-				// }),
-				terser({
-					compress: {
-						drop_console: true,
-						passes: 2
-					}
-				}),
-				del({
-					targets: `${dist}/*`
-				})
+			...plugins,
+			del({
+				targets: `${dist}/*`
+			})
 		]
 	},
 	{
-		input: 'src/index.ts',
+		input: [
+			'src/index.ts'
+		],
 		output: [
 			{
-				file: `${dist}/index.d.ts`,
+				dir: `${dist}/types`,
 				format: 'esm'
 			}
 		],

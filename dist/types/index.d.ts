@@ -4,7 +4,6 @@ type RedrawOptions = {
 };
 type ElementOptions = {
     observe?: boolean;
-    track?: boolean;
     draw?: boolean;
     onResize?: (rect: DOMRect, element: HTMLElement) => void;
 };
@@ -12,8 +11,8 @@ type ElementOptions = {
 declare enum CornerType {
     Squircle = "squircle",
     FigmaSquircle = "figma-squircle",
-    Round = "round",
-    Flat = "flat"
+    Flat = "flat",
+    Round = "round"
 }
 type DrawOptions = {
     width?: number;
@@ -38,6 +37,6 @@ type BackgroundOptions = PathOptions & {
 declare function createPath({ width: w, height: h, smoothing, radius: radiusOrArray, offset: offsetOrArray, type, precision, isArray }: PathOptions): string | (string | (string | number | (string | number)[])[])[];
 declare function addCorners(element: HTMLElement, options: BackgroundOptions & ElementOptions): (drawOptions: RedrawOptions) => void;
 declare function draw(element?: HTMLElement): void;
-declare function untrack(element: HTMLElement): void;
+declare function unobserve(element: HTMLElement): void;
 
-export { type BackgroundOptions, CornerType, type DrawOptions, type PathOptions, addCorners, createPath, draw, untrack };
+export { type BackgroundOptions, CornerType, type DrawOptions, type PathOptions, addCorners, createPath, draw, unobserve };

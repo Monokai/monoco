@@ -1,6 +1,6 @@
 {
   "name": "@monokai/monoco",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Monokai",
   "license": "MIT",
   "description": "custom corners and borders for html elements",
@@ -23,9 +23,6 @@
     "./dist",
     "./src"
   ],
-  "browserslist": [
-    ">1%, last 2 versions and > 0.05%, not dead"
-  ],
   "scripts": {
     "build": "rollup -c",
     "build:production": "rollup -c --environment BUILD:production",
@@ -39,9 +36,7 @@
     "html"
   ],
   "devDependencies": {
-    "@babel/preset-env": "^7.24.6",
     "@clarifynl/eslint-config-clarify": "^0.14.0",
-    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",

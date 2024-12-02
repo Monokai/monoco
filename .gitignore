@@ -1,4 +1,5 @@
 node_modules/
+doc/
 
 # Ignore Sublime Text files
 *.sublime-project
