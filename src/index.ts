@@ -50,7 +50,7 @@ function createBackground(options:BackgroundOptions) {
 	const paths:string[] = [];
 	const borderArray = Array.isArray(borderOrArray?.[0]) ? borderOrArray : [borderOrArray];
 	const offsetArray = Array.isArray(offsetOrArray) ? offsetOrArray : [offsetOrArray, offsetOrArray, offsetOrArray, offsetOrArray];
-	const clipPath = createPath(options);
+	const clipPath = clip ? null : createPath(options);
 
 	if (borderArray?.length) {
 		let borderRadius = 0;

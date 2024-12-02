@@ -1,102 +1,115 @@
-type ElementSpecs = {
-	draw: () => void,
-	observer: ResizeObserver,
-	element: HTMLElement
-}
-
 export type RedrawOptions = {
 	width?:number,
 	height?:number
 }
 
+type ElementSpecs = {
+	draw?: (drawOptions?:RedrawOptions) => void,
+	onResize?: (rect:DOMRect, element:HTMLElement) => void,
+	previousW: number | null,
+	previousH: number | null,
+	element: HTMLElement
+}
+
 export type ElementOptions = {
 	observe?:boolean,
-	draw?:boolean,
 	onResize?:(rect:DOMRect, element:HTMLElement) => void
 };
 
 export default new class ElementManager {
-	elements = new Map();
+	elements:Map<HTMLElement, ElementSpecs> | null
+	observer:ResizeObserver | null
 
 	constructor() {
-		this.elements = new Map();
+		this.elements = null;
+		this.observer = null;
 	}
 
-	addElement(element:HTMLElement, options:ElementOptions, drawFunk:(drawOptions:RedrawOptions) => void) {
+	onElementResize(resizeList:ResizeObserverEntry[]) {
+		for (const entry of resizeList) {
+			const rect = entry.target.getBoundingClientRect();
+			const specs = this.elements?.get(entry.target as HTMLElement);
+
+			if (!specs) {
+				continue;
+			}
+
+			const {
+				previousW,
+				previousH,
+				draw,
+				onResize
+			} = specs;
+
+			if (
+				previousW !== rect.width ||
+				previousH !== rect.height
+			) {
+				draw?.({
+					width: rect.width,
+					height: rect.height
+				})
+
+				onResize?.(rect, entry.target as HTMLElement)
+
+				specs.previousW = rect.width;
+				specs.previousH = rect.height;
+			}
+		}
+	}
+
+	addElement(element:HTMLElement, options:ElementOptions, draw:(drawOptions?:RedrawOptions) => void) {
+		if (!this.elements) {
+			this.elements = new Map();
+		}
+
+		if (!this.observer) {
+			this.observer = new ResizeObserver(resizeList => this.onElementResize(resizeList));
+		}
+
 		this.unobserve(element);
 
 		const {
 			observe = true,
-			draw = true,
 			onResize
 		} = options;
 
 		if (observe) {
-			let previousW:number | null = null;
-			let previousH:number | null = null;
+			this.observer.observe(element);
 
-			const onResizeFunk = (resizeList:ResizeObserverEntry[]) => {
-				for (const entry of resizeList) {
-					const rect = entry.target.getBoundingClientRect();
-
-					if (
-						previousW !== rect.width ||
-						previousH !== rect.height
-					) {
-						if (draw) {
-							drawFunk({
-								width: rect.width,
-								height: rect.height
-							});
-						}
-
-						onResize?.(rect, entry.target as HTMLElement);
-
-						previousW = rect.width;
-						previousH = rect.height;
-					}
-				}
-			};
-
-			const observer = new ResizeObserver(onResizeFunk);
-
-			observer.observe(element);
+			const previousW = null;
+			const previousH = null;
 
 			this.elements.set(element, {
-				draw: drawFunk,
-				element,
-				observer
+				draw,
+				onResize,
+				previousW,
+				previousH,
+				element
 			});
 		}
 
-		return drawFunk;
+		return draw;
 	}
 
 	draw(element?:HTMLElement) {
 		if (element) {
-			this.elements.get(element)?.draw?.();
+			this.elements?.get(element)?.draw?.();
 		} else {
-			this.elements.forEach((o:ElementSpecs) => o.draw?.());
+			this.elements?.forEach((o:ElementSpecs) => o.draw?.());
 		}
 	}
 
 	unobserve(element:HTMLElement) {
 		const funk = (el:HTMLElement) => {
-			const specs:ElementSpecs = this.elements.get(el);
-
-			if (specs) {
-				const { observer } = specs;
-
-				observer?.disconnect();
-
-				this.elements.delete(element);
-			}
+			this.observer?.unobserve(element);
+			this.elements?.delete(element);
 		}
 
 		if (element) {
 			funk(element);
 		} else {
-			this.elements.forEach(([, el]) => funk(el));
+			this.elements?.keys().forEach(el => funk(el));
 		}
 	}
 }();

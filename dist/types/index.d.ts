@@ -4,7 +4,6 @@ type RedrawOptions = {
 };
 type ElementOptions = {
     observe?: boolean;
-    draw?: boolean;
     onResize?: (rect: DOMRect, element: HTMLElement) => void;
 };
 
@@ -35,7 +34,7 @@ type BackgroundOptions = PathOptions & {
     clip?: boolean;
 };
 declare function createPath({ width: w, height: h, smoothing, radius: radiusOrArray, offset: offsetOrArray, type, precision, isArray }: PathOptions): string | (string | (string | number | (string | number)[])[])[];
-declare function addCorners(element: HTMLElement, options: BackgroundOptions & ElementOptions): (drawOptions: RedrawOptions) => void;
+declare function addCorners(element: HTMLElement, options: BackgroundOptions & ElementOptions): (drawOptions?: RedrawOptions) => void;
 declare function draw(element?: HTMLElement): void;
 declare function unobserve(element: HTMLElement): void;
 
