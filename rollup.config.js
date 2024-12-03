@@ -51,7 +51,7 @@ export default [
 		],
 		output: [
 			{
-				dir: `${dist}/types`,
+				dir: `${dist}`,
 				format: 'esm'
 			}
 		],
