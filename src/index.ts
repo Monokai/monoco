@@ -223,9 +223,7 @@ export function addCorners(element:HTMLElement, cornerOptions:CornerOptions) {
 			combinedOptions.height = combinedOptions.height ? Math.round(combinedOptions.height) : undefined
 		}
 
-		if (options.clip) {
-			element.style.clipPath = `path('${createPath(combinedOptions)}')`
-		}
+		element.style.clipPath = options.clip ? `path('${createPath(combinedOptions)}')` : ''
 
 		if (options.background || options.border) {
 			element.style.backgroundImage = createBackground(combinedOptions)
