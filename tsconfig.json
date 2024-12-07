@@ -1,15 +1,20 @@
 {
 	"compilerOptions": {
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"removeComments": false,
-		"sourceMap": true,
 		"target": "es2022",
 		"rootDir": "./src",
 		"strict": true,
 		"module": "esnext",
 		"noEmitOnError": true,
 		"lib": ["dom", "dom.iterable", "esnext"],
-		"esModuleInterop": false
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true
 	},
 	"include": ["src"]
 }

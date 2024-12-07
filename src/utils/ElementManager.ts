@@ -1,10 +1,13 @@
+import { CornerOptions } from ".."
+
 export type RedrawOptions = {
 	width?:number,
 	height?:number
 }
 
 type ElementSpecs = {
-	draw?: (drawOptions?:RedrawOptions) => void,
+	draw: (redrawOptions?:RedrawOptions) => void,
+	cornerOptions: CornerOptions,
 	onResize?: (rect:DOMRect, element:HTMLElement) => void,
 	previousW: number | null,
 	previousH: number | null,
@@ -13,25 +16,26 @@ type ElementSpecs = {
 
 export type ElementOptions = {
 	observe?:boolean,
+	// useCSS?:boolean,
 	onResize?:(rect:DOMRect, element:HTMLElement) => void
-};
+}
 
 export default new class ElementManager {
 	elements:Map<HTMLElement, ElementSpecs> | null
 	observer:ResizeObserver | null
 
 	constructor() {
-		this.elements = null;
-		this.observer = null;
+		this.elements = null
+		this.observer = null
 	}
 
 	onElementResize(resizeList:ResizeObserverEntry[]) {
 		for (const entry of resizeList) {
-			const rect = entry.target.getBoundingClientRect();
-			const specs = this.elements?.get(entry.target as HTMLElement);
+			const rect = entry.target.getBoundingClientRect()
+			const specs = this.elements?.get(entry.target as HTMLElement)
 
 			if (!specs) {
-				continue;
+				continue
 			}
 
 			const {
@@ -39,7 +43,7 @@ export default new class ElementManager {
 				previousH,
 				draw,
 				onResize
-			} = specs;
+			} = specs
 
 			if (
 				previousW !== rect.width ||
@@ -52,64 +56,83 @@ export default new class ElementManager {
 
 				onResize?.(rect, entry.target as HTMLElement)
 
-				specs.previousW = rect.width;
-				specs.previousH = rect.height;
+				specs.previousW = rect.width
+				specs.previousH = rect.height
 			}
 		}
 	}
 
-	addElement(element:HTMLElement, options:ElementOptions, draw:(drawOptions?:RedrawOptions) => void) {
+	getDrawOptions(element:HTMLElement):CornerOptions | null {
+		return this.elements?.get(element)?.cornerOptions ?? null;
+	}
+
+	setCornerOptions(element:HTMLElement, cornerOptions:CornerOptions) {
+		const specs = this.elements?.get(element);
+
+		if (specs) {
+			specs.cornerOptions = cornerOptions;
+
+			this.elements?.set(element, specs);
+		}
+	}
+
+	addElement(element:HTMLElement, cornerOptions:CornerOptions & ElementOptions, draw:(redrawOptions?:RedrawOptions) => void) {
 		if (!this.elements) {
-			this.elements = new Map();
+			this.elements = new Map()
 		}
 
 		if (!this.observer) {
-			this.observer = new ResizeObserver(resizeList => this.onElementResize(resizeList));
+			this.observer = new ResizeObserver(resizeList => this.onElementResize(resizeList))
 		}
 
-		this.unobserve(element);
+		this.unobserve(element)
 
 		const {
 			observe = true,
 			onResize
-		} = options;
+		} = cornerOptions
 
 		if (observe) {
-			this.observer.observe(element);
+			this.observer.observe(element)
 
-			const previousW = null;
-			const previousH = null;
+			const previousW = null
+			const previousH = null
 
 			this.elements.set(element, {
 				draw,
+				cornerOptions,
 				onResize,
 				previousW,
 				previousH,
 				element
-			});
+			})
 		}
 
-		return draw;
+		return draw
 	}
 
-	draw(element?:HTMLElement) {
+	draw(element?:HTMLElement, cornerOptions?:CornerOptions) {
 		if (element) {
-			this.elements?.get(element)?.draw?.();
+			if (cornerOptions) {
+				this.setCornerOptions(element, cornerOptions)
+			}
+
+			this.elements?.get(element)?.draw?.()
 		} else {
-			this.elements?.forEach((o:ElementSpecs) => o.draw?.());
+			this.elements?.forEach((o:ElementSpecs) => o.draw?.())
 		}
 	}
 
 	unobserve(element:HTMLElement) {
 		const funk = (el:HTMLElement) => {
-			this.observer?.unobserve(element);
-			this.elements?.delete(element);
+			this.observer?.unobserve(element)
+			this.elements?.delete(element)
 		}
 
 		if (element) {
-			funk(element);
+			funk(element)
 		} else {
-			this.elements?.keys().forEach(el => funk(el));
+			this.elements?.keys().forEach(el => funk(el))
 		}
 	}
-}();
+}()

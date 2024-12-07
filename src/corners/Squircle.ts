@@ -33,29 +33,29 @@ function getSquircleCorner(
 	preserveSmoothing:boolean,
 	maxSize:number
 ) {
-	let p = (1 + smoothing) * radius;
+	let p = (1 + smoothing) * radius
 
 	if (!preserveSmoothing) {
-		smoothing = Math.min(smoothing, maxSize / radius - 1);
-		p = Math.min(p, maxSize);
+		smoothing = Math.min(smoothing, maxSize / radius - 1)
+		p = Math.min(p, maxSize)
 	}
 
-	const arc = Math.PI * 0.5 * (1 - smoothing);
-	const arcLength = Math.sin(arc / 2) * radius * 2 ** 0.5;
-	const angle = Math.PI * 0.25 * smoothing;
-	const c = radius * Math.tan((Math.PI * 0.5 - arc) * 0.25) * Math.cos(angle);
-	const d = c * Math.tan(angle);
+	const arc = Math.PI * 0.5 * (1 - smoothing)
+	const arcLength = Math.sin(arc / 2) * radius * 2 ** 0.5
+	const angle = Math.PI * 0.25 * smoothing
+	const c = radius * Math.tan((Math.PI * 0.5 - arc) * 0.25) * Math.cos(angle)
+	const d = c * Math.tan(angle)
 
-	let b = (p - arcLength - c - d) / 3;
-	let a = 2 * b;
+	let b = (p - arcLength - c - d) / 3
+	let a = 2 * b
 
 	if (preserveSmoothing && p > maxSize) {
-		const pDist2 = maxSize - d - arcLength - c;
-		const maxB = pDist2 - pDist2 / 6;
+		const pDist2 = maxSize - d - arcLength - c
+		const maxB = pDist2 - pDist2 / 6
 
-		b = Math.min(b, maxB);
-		a = pDist2 - b;
-		p = Math.min(p, maxSize);
+		b = Math.min(b, maxB)
+		a = pDist2 - b
+		p = Math.min(p, maxSize)
 	}
 
 	return {
@@ -86,10 +86,10 @@ function createSquircleCorner(
 			['c', ...c1],
 			...[arcLength ? ['a', radius, radius, 0, 0, 1, ...arcMultiplier.map(x => x * arcLength)] : []],
 			['c', ...c2]
-		];
+		]
 	}
 
-	return [['l', ...l]];
+	return [['l', ...l]]
 }
 
 export function createPath({
@@ -107,13 +107,13 @@ export function createPath({
 	offsets:number[],
 	preserveSmoothing:boolean,
 }) {
-	const [ot,,, ol] = offsets;
+	const [ot,,, ol] = offsets
 	const [c1, c2, c3, c4] = radii.map(radius => getSquircleCorner(
 		radius,
 		smoothing,
 		preserveSmoothing,
 		Math.min(width, height) * 0.5
-	));
+	))
 
 	return [
 		['M', width - c2.p + ol, ot],
@@ -149,5 +149,5 @@ export function createPath({
 			[0, -c1.p]
 		),
 		['Z']
-	];
+	]
 }

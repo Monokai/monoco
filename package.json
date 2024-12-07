@@ -1,21 +1,22 @@
 {
   "name": "@monokai/monoco",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "author": "Monokai",
   "license": "MIT",
-  "description": "custom corners and borders for html elements",
+  "description": "Custom (squircle) corners and borders for html elements",
   "repository": {
     "type": "git",
     "url": "https://github.com/monokai/monoco.git"
   },
   "type": "module",
-  "types": "dist/index.d.ts",
   "sideEffects": false,
   "main": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js"
+      "require": "./dist/index.cjs.js" ,
+      "types": "./dist/index.d.ts"
     },
     "./source": "./src/index.ts"
   },

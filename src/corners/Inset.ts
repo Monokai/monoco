@@ -13,14 +13,19 @@ export function createPath({
 	const [rtl, rtr, rbr, rbl] = radii
 
 	return [
-		['M', ol + rtl, ot],
+		['M', ol + rbl, ot],
 		['L', width - rtr + ol, ot],
+		['L', width - rtr + ol, ot + rtr],
 		['L', width + ol, ot + rtr],
 		['L', width + ol, height - rbr + ot],
+		['L', width - rbr + ol, height - rbr + ot],
 		['L', width - rbr + ol, height + ot],
 		['L', ol + rbl, height + ot],
+		['L', ol + rbl, height - rbl + ot],
 		['L', ol, height - rbl + ot],
 		['L', ol, ot + rtl],
+		['L', ol + rtl, ot + rtl],
+		['L', ol + rtl, ot],
 		['Z']
 	]
 }

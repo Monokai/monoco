@@ -11,7 +11,9 @@ declare enum CornerType {
     Squircle = "squircle",
     FigmaSquircle = "figma-squircle",
     Flat = "flat",
-    Round = "round"
+    Inset = "inset",
+    Round = "round",
+    RoundInverse = "round-inverse"
 }
 type DrawOptions = {
     width?: number;
@@ -27,15 +29,16 @@ type PathOptions = DrawOptions & {
     isArray?: boolean;
 };
 type BackgroundOptions = PathOptions & {
-    color?: string;
+    background?: string;
     border?: [number, string] | [number, string][];
     strokeDrawType?: number;
     clipID?: string;
     clip?: boolean;
 };
+type CornerOptions = BackgroundOptions & ElementOptions;
 declare function createPath({ width: w, height: h, smoothing, radius: radiusOrArray, offset: offsetOrArray, type, precision, isArray }: PathOptions): string | (string | (string | number | (string | number)[])[])[];
-declare function addCorners(element: HTMLElement, options: BackgroundOptions & ElementOptions): (drawOptions?: RedrawOptions) => void;
-declare function draw(element?: HTMLElement): void;
+declare function addCorners(element: HTMLElement, cornerOptions: CornerOptions): (redrawOptions?: RedrawOptions) => void;
+declare function draw(element?: HTMLElement, options?: CornerOptions): void;
 declare function unobserve(element: HTMLElement): void;
 
-export { type BackgroundOptions, CornerType, type DrawOptions, type PathOptions, addCorners, createPath, draw, unobserve };
+export { type CornerOptions, CornerType, type PathOptions, addCorners, createPath, draw, unobserve };
