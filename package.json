@@ -1,22 +1,30 @@
 {
   "name": "@monokai/monoco",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "author": "Monokai",
   "license": "MIT",
   "description": "Custom (squircle) corners and borders for html elements",
+  "keywords": [
+    "corner",
+    "border",
+    "squircle",
+    "svg",
+    "html"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/monokai/monoco.git"
   },
   "type": "module",
   "sideEffects": false,
-  "main": "./dist/index.umd.js",
   "types": "./dist/index.d.ts",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js" ,
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     },
     "./source": "./src/index.ts"
   },
@@ -29,20 +37,13 @@
     "build:production": "rollup -c --environment BUILD:production",
     "watch": "rollup src/index.ts --format umd --name monoco --watch --output.file=dist/umd/index.js"
   },
-  "keywords": [
-    "corner",
-    "border",
-    "squircle",
-    "svg",
-    "html"
-  ],
   "devDependencies": {
     "@clarifynl/eslint-config-clarify": "^0.14.0",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.1",
-    "rollup": "^4.18.0",
+    "rollup": "^4.28.1",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^6.1.1",
     "tslib": "^2.8.1",
