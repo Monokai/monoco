@@ -3,8 +3,8 @@
 Custom (squircle) corners for html elements.
 
 - [Demo](https://monokai.github.io/monoco-demo/)
-- [React version](https://monokai.github.com/monoco-react)
-- [Svelte version](https://monokai.github.com/monoco-svelte)
+- [React version](https://github.com/monokai/monoco-react)
+- [Svelte version](https://github.com/monokai/monoco-svelte)
 
 ## Installation
 
