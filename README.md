@@ -1,6 +1,10 @@
 # Monoco
 
-Custom (squircle) corners for html elements. [Demo](https://monokai.github.io/monoco-demo/)
+Custom (squircle) corners for html elements.
+
+- [Demo](https://monokai.github.io/monoco-demo/)
+- [React version](https://monokai.github.com/monoco-react)
+- [Svelte version](https://monokai.github.com/monoco-svelte)
 
 ## Installation
 
@@ -24,7 +28,7 @@ npm install @monokai/monoco
 | observe | boolean | Observe element for resize (default: true) |
 | onResize | (rect:DOMRect, element:HTMLElement) => void | Callback when element resizes |
 | precision | number | Precision of the path (default: 3) |
-| isRounded | boolean | Use rounded values for width and height
+| isRounded | boolean | Use rounded values for width and height (default: false)
 
 ## Notes
 
