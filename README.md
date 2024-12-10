@@ -1,6 +1,6 @@
 # Monoco
 
-Custom (squircle) corners for html elements.
+Custom (squircle) corners for html elements. [Demo](https://monokai.github.io/monoco-demo/)
 
 ## Installation
 

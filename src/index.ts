@@ -67,12 +67,14 @@ function createBackground(options:BackgroundOptions) {
 
 			const strokeWidth = strokeDrawType === 0 ? (borderRadius + size) * 2 : size
 
-			borderPaths.push(`<path d="${createPath({
-				...options,
-				offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + borderRadius + size * 0.5)
-			})}" fill="none" stroke="${borderColor}" stroke-width="${strokeWidth}" />`)
+			if (size) {
+				borderPaths.push(`<path d="${createPath({
+					...options,
+					offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + borderRadius + size * 0.5)
+				})}" fill="none" stroke="${borderColor}" stroke-width="${strokeWidth}" />`)
 
-			borderRadius += size
+				borderRadius += size
+			}
 		}
 
 		if (background) {
