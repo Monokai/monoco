@@ -2,7 +2,7 @@
 
 Custom (squircle) corners for html elements.
 
-- [Demo](https://monokai.github.io/monoco-demo/)
+- [Demo](https://somonoco.com)
 - [React version](https://github.com/monokai/monoco-react)
 - [Svelte version](https://github.com/monokai/monoco-svelte)
 
