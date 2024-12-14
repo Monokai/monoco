@@ -8,7 +8,7 @@ export type RedrawOptions = {
 type ElementSpecs = {
 	draw: (redrawOptions?:RedrawOptions) => void,
 	cornerOptions: CornerOptions,
-	onResize?: (rect:DOMRect, element:HTMLElement) => void,
+	onResize?: (rect?:DOMRect, element?:HTMLElement) => void,
 	previousW: number | null,
 	previousH: number | null,
 	element: HTMLElement
@@ -17,7 +17,7 @@ type ElementSpecs = {
 export type ElementOptions = {
 	observe?:boolean,
 	// useCSS?:boolean,
-	onResize?:(rect:DOMRect, element:HTMLElement) => void
+	onResize?:(rect?:DOMRect, element?:HTMLElement) => void
 }
 
 export default new class ElementManager {

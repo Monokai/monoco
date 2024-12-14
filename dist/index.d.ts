@@ -4,7 +4,7 @@ type RedrawOptions = {
 };
 type ElementOptions = {
     observe?: boolean;
-    onResize?: (rect: DOMRect, element: HTMLElement) => void;
+    onResize?: (rect?: DOMRect, element?: HTMLElement) => void;
 };
 
 declare enum CornerType {
