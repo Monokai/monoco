@@ -1,6 +1,6 @@
 {
   "name": "@monokai/monoco",
-  "version": "0.0.13",
+  "version": "0.1.2",
   "author": "Monokai",
   "license": "MIT",
   "description": "Custom (squircle) corners and borders for html elements",

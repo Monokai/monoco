@@ -6,6 +6,6 @@ export function createPath(options:DefaultCornerTypeOptions) {
 		...options,
 		smoothing: 0,
 		preserveSmoothing: false,
-		sweepFlag: 1
+		sweepFlag: 0
 	})
 }

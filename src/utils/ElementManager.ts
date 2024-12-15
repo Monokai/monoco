@@ -1,11 +1,11 @@
 import { CornerOptions } from ".."
 
-export type RedrawOptions = {
+export interface RedrawOptions {
 	width?:number,
 	height?:number
 }
 
-type ElementSpecs = {
+interface ElementSpecs {
 	draw: (redrawOptions?:RedrawOptions) => void,
 	cornerOptions: CornerOptions,
 	onResize?: (rect?:DOMRect, element?:HTMLElement) => void,
@@ -14,9 +14,8 @@ type ElementSpecs = {
 	element: HTMLElement
 }
 
-export type ElementOptions = {
+export interface ElementOptions {
 	observe?:boolean,
-	// useCSS?:boolean,
 	onResize?:(rect?:DOMRect, element?:HTMLElement) => void
 }
 

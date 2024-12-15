@@ -74,6 +74,8 @@ function getSquircleCorner(
 
 
 function createSquircleCorner(
+	smoothing:number,
+	sweepFlag:number,
 	radius:number,
 	c1:number[],
 	arcLength:number,
@@ -83,9 +85,9 @@ function createSquircleCorner(
 ) {
 	if (radius) {
 		return [
-			['c', ...c1],
-			...[arcLength ? ['a', radius, radius, 0, 0, 1, ...arcMultiplier.map(x => x * arcLength)] : []],
-			['c', ...c2]
+			...[smoothing ? ['c', ...c1] : []],
+			...[arcLength ? ['a', radius, radius, 0, 0, sweepFlag, ...arcMultiplier.map(x => x * arcLength)] : []],
+			...[smoothing ? ['c', ...c2] : []],
 		]
 	}
 
@@ -95,17 +97,19 @@ function createSquircleCorner(
 export function createPath({
 	width,
 	height,
-	smoothing,
 	radii,
 	offsets,
-	preserveSmoothing
+	smoothing = 1,
+	preserveSmoothing = true,
+	sweepFlag = 1
 }:{
 	width:number,
 	height:number,
-	smoothing:number,
 	radii:number[],
 	offsets:number[],
-	preserveSmoothing:boolean,
+	smoothing?:number,
+	preserveSmoothing?:boolean,
+	sweepFlag?:number
 }) {
 	const [ot,,, ol] = offsets
 	const [c1, c2, c3, c4] = radii.map(radius => getSquircleCorner(
@@ -118,6 +122,8 @@ export function createPath({
 	return [
 		['M', width - c2.p + ol, ot],
 		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
 			c2.radius,
 			[c2.a, 0, c2.ab, 0, c2.abc, c2.d],
 			c2.arcLength, [1, 1],
@@ -126,6 +132,8 @@ export function createPath({
 		),
 		['L', width + ol, height - c3.p + ot],
 		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
 			c3.radius,
 			[0, c3.a, 0, c3.ab, -c3.d, c3.abc],
 			c3.arcLength, [-1, 1],
@@ -134,6 +142,8 @@ export function createPath({
 		),
 		['L', c4.p + ol, height + ot],
 		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
 			c4.radius,
 			[-c4.a, 0, -c4.ab, 0, -c4.abc, -c4.d],
 			c4.arcLength, [-1, -1],
@@ -142,6 +152,8 @@ export function createPath({
 		),
 		['L', ol, c1.p + ot],
 		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
 			c1.radius,
 			[0, -c1.a, 0, -c1.ab, c1.d, -c1.abc],
 			c1.arcLength, [1, -1],

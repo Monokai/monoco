@@ -21,7 +21,7 @@ npm install @monokai/monoco
 | radius | number \| number[] | Radius of the corners, or array [top left, top right, bottom right, bottom left] |
 | offset | number \| number[] | Offset of the corners, or array [top, right, bottom, left] |
 | border | [number, string][] | Border of the corners, or array of borders |
-| type | 'squircle' \| 'figma-squircle' \| 'round' \| 'round-inverse' \| 'flat' \| 'inset' | Corner type |
+| type | {width:number, height:number, radii:number[], offsets:number[]} => (string\|number)[][] | Corner type (default: Squircle) |
 | clip | boolean | Use clip-path on element |
 | width | number | Width of the element (default: auto) |
 | height | number | Height of the element (default: auto) |
@@ -49,7 +49,19 @@ Note that `box-shadow` css values are not supported, as it doesn't take the svg 
 ## Example usage
 
 ```ts
-import { addCorners, draw, unobserve } from '@monokai/monoco'
+import {
+  addCorners,
+  draw,
+  unobserve,
+
+  // corner types:
+  FigmaSquircle,
+  Flat,
+  Inset
+  Round,
+  RoundInverse,
+  Squircle
+} from '@monokai/monoco'
 
 const element = document.getElementById('element')
 
@@ -116,7 +128,7 @@ addCorners(element, {
   background: '#f00',
   smoothing: 1,
   radius: 16,
-  type: 'round-inverse'
+  type: RoundInverse
 })
 
 // observe (default: true) redraws when element triggers resize observer, you can optionally turn this off
