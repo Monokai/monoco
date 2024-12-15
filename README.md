@@ -148,3 +148,30 @@ draw(element, options)
 // manual redraw corners on all elements
 draw()
 ```
+
+## Custom corner types
+
+You can define your own corner types by providing a function to the `type` parameter that returns an array of corner values. The function receives an object with the following properties:
+
+```ts
+{
+  width: number,
+  height: number,
+  radii: number[],
+  offsets: number[]
+}
+```
+
+You can optionally add your own properties to this options object and use them in your custom corner type.
+
+Your function should return an array of path commands, for example:
+
+```ts
+return [
+  ['M', 0, 0],
+  ['L', width, 0],
+  ['L', width, height],
+  ['L', 0, height],
+  ['Z']
+];
+```
