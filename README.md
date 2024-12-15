@@ -149,9 +149,13 @@ draw(element, options)
 draw()
 ```
 
+## Difference between the default squircle and the Figma squircle.
+
+The default corner type is `Squircle`. You can also use the `FigmaSquircle` corner type to match the corners as they are calculated in Figma. The difference is subtle, but it has to do with the fact the Figma preserves more of the round shape in certain conditions where the radius is big, whereas `Squircle` preserves more of the smooth squircle shape.
+
 ## Custom corner types
 
-You can define your own corner types by providing a function to the `type` parameter that returns an array of corner values. The function receives an object with the following properties:
+You can define your own corner types by providing a function to the `type`. The function receives an object with the following properties:
 
 ```ts
 {
@@ -162,9 +166,7 @@ You can define your own corner types by providing a function to the `type` param
 }
 ```
 
-You can optionally add your own properties to this options object and use them in your custom corner type.
-
-Your function should return an array of path commands, for example:
+You can optionally add your own properties to this options object and use them in your custom function. Your function should return an array of SVG path commands, for example:
 
 ```ts
 return [
