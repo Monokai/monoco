@@ -39,22 +39,22 @@ function createBackground(options:BackgroundOptions) {
 	const clipPath = clip ? null : createPath(options)
 
 	if (borderArray?.length) {
-		let borderRadius = 0
+		let totalBorderRadius = 0
 
 		const borderPaths:string[] = []
 
 		for (let i = 0; i < borderArray.length; i++) {
 			const [size, borderColor] = borderArray[i] as [number, string]
 
-			const strokeWidth = strokeDrawType === 0 ? (borderRadius + size) * 2 : size
+			const strokeWidth = strokeDrawType === 0 ? (totalBorderRadius + size) * 2 : size
 
 			if (size) {
 				borderPaths.push(`<path d="${createPath({
 					...options,
-					offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + borderRadius + size * 0.5)
+					offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + totalBorderRadius + size * 0.5)
 				})}" fill="none" stroke="${borderColor}" stroke-width="${strokeWidth}" />`)
 
-				borderRadius += size
+				totalBorderRadius += size
 			}
 		}
 
@@ -75,10 +75,10 @@ function createBackground(options:BackgroundOptions) {
 export function createPath({
 	width:w = 0,
 	height:h = 0,
-	radius:radiusOrArray = 0,
+	borderRadius:radiusOrArray = 0,
 	offset:offsetOrArray = 0,
 	smoothing = 1,
-	type = Squircle,
+	cornerType = Squircle,
 	precision = 3,
 	isArray = false
 }:PathOptions) {
@@ -95,8 +95,8 @@ export function createPath({
 
 	let path
 
-	if (type) {
-		path = type({
+	if (cornerType) {
+		path = cornerType({
 			width,
 			height,
 			radii,

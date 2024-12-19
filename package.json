@@ -1,6 +1,6 @@
 {
   "name": "@monokai/monoco",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "Monokai",
   "license": "MIT",
   "description": "Custom (squircle) corners and borders for html elements",
@@ -39,10 +39,10 @@
   },
   "devDependencies": {
     "@clarifynl/eslint-config-clarify": "^0.14.0",
-    "@rollup/plugin-commonjs": "^28.0.1",
-    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.1",
+    "@rollup/plugin-typescript": "^12.1.2",
     "rollup": "^4.28.1",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^6.1.1",

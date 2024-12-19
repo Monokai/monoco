@@ -21,9 +21,9 @@ interface DrawOptions {
 	width?:number,
 	height?:number,
 	smoothing?:number,
-	radius?:number | number[],
+	borderRadius?:number | number[],
 	offset?:number | number[],
-	type?(options:CornerTypeOptions):(string | number)[][],
+	cornerType?(options:CornerTypeOptions):(string | number)[][],
 	precision?:number,
 	isRounded?:boolean
 }

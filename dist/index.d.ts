@@ -20,7 +20,7 @@ interface DefaultCornerTypeOptions {
     radii: number[];
     offsets: number[];
 }
-declare function createPath$6({ width: w, height: h, radius: radiusOrArray, offset: offsetOrArray, smoothing, type, precision, isArray }: PathOptions): string | (string | (string | number | (string | number)[])[])[];
+declare function createPath$6({ width: w, height: h, borderRadius: radiusOrArray, offset: offsetOrArray, smoothing, cornerType, precision, isArray }: PathOptions): string | (string | (string | number | (string | number)[])[])[];
 declare function addCorners(element: HTMLElement, cornerOptions: CornerOptions): (redrawOptions?: RedrawOptions) => void;
 
 declare function createPath$5(options: DefaultCornerTypeOptions & {
@@ -64,9 +64,9 @@ interface DrawOptions {
     width?: number;
     height?: number;
     smoothing?: number;
-    radius?: number | number[];
+    borderRadius?: number | number[];
     offset?: number | number[];
-    type?(options: CornerTypeOptions): (string | number)[][];
+    cornerType?(options: CornerTypeOptions): (string | number)[][];
     precision?: number;
     isRounded?: boolean;
 }

@@ -18,10 +18,10 @@ npm install @monokai/monoco
 | --- | --- | --- |
 | background | string | background color |
 | smoothing | number | Smoothing factor of the corners (between 0 and 1, default: 1) |
-| radius | number \| number[] | Radius of the corners, or array [top left, top right, bottom right, bottom left] |
+| borderRadius | number \| number[] | Radius of the corners, or array [top left, top right, bottom right, bottom left] |
 | offset | number \| number[] | Offset of the corners, or array [top, right, bottom, left] |
 | border | [number, string][] | Border of the corners, or array of borders |
-| type | {width:number, height:number, radii:number[], offsets:number[]} => (string\|number)[][] | Corner type (default: Squircle) |
+| cornerType | {width:number, height:number, radii:number[], offsets:number[]} => (string\|number)[][] | Corner type (default: Squircle) |
 | clip | boolean | Use clip-path on element |
 | width | number | Width of the element (default: auto) |
 | height | number | Height of the element (default: auto) |
@@ -68,7 +68,7 @@ const element = document.getElementById('element')
 // use clip
 addCorners(element, {
   smoothing: 1,
-  radius: 32,
+  borderRadius: 32,
   clip: true
 })
 
@@ -76,21 +76,21 @@ addCorners(element, {
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: 32,
+  borderRadius: 32,
 })
 
-// multi-radius (top left, top right, bottom right, bottom left)
+// multi-borderRadius (top left, top right, bottom right, bottom left)
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: [32, 4, 8, 16],
+  borderRadius: [32, 4, 8, 16],
 })
 
 // offset
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: 32,
+  borderRadius: 32,
   offset: 16
 })
 
@@ -98,7 +98,7 @@ addCorners(element, {
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: 32,
+  borderRadius: 32,
   offset: [16, 4, 2, 8]
 })
 
@@ -106,7 +106,7 @@ addCorners(element, {
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: 32,
+  borderRadius: 32,
   border: [4, '#f00']
 })
 
@@ -114,7 +114,7 @@ addCorners(element, {
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: 32,
+  borderRadius: 32,
   border: [
     [4, '#f00'],
     [2, '#0f0'],
@@ -127,15 +127,15 @@ addCorners(element, {
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: 16,
-  type: RoundInverse
+  borderRadius: 16,
+  cornerType: RoundInverse
 })
 
 // observe (default: true) redraws when element triggers resize observer, you can optionally turn this off
 addCorners(element, {
   background: '#f00',
   smoothing: 1,
-  radius: 32,
+  borderRadius: 32,
   observe: false
 })
 
@@ -155,7 +155,7 @@ The default corner type is `Squircle`. You can also use the `FigmaSquircle` corn
 
 ## Custom corner types
 
-You can define your own corner types by providing a function to the `type`. The function receives an object with the following properties:
+You can define your own corner types by providing a function to the `cornerType`. The function receives an object with the following properties:
 
 ```ts
 {
