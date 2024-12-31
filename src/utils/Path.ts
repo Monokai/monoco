@@ -90,8 +90,25 @@ export function createPath({
 	const [ot, or, ob, ol] = offsets
 	const width = w - ol - or
 	const height = h - ot - ob
-	const minSize = Math.min(width, height) * 0.5
-	const radii = (Array.isArray(radiusOrArray) ? radiusOrArray : [radiusOrArray, radiusOrArray, radiusOrArray, radiusOrArray]).map((r, i) => Math.max(0, Math.min(r - offsets[i], minSize)))
+
+	let radii;
+
+	if (Array.isArray(radiusOrArray)) {
+		// https://drafts.csswg.org/css-backgrounds/#corner-overlap
+		const sides = radiusOrArray.map((r, i) => r + radiusOrArray[(i + 1) % 4])
+		const f = Math.min(...sides.map((s, i) => (i % 2 === 0 ? width : height) / s))
+
+		if (f < 1) {
+			radii = radiusOrArray.map(r => r * f);
+		} else {
+			radii = radiusOrArray;
+		}
+	} else {
+		radii = [radiusOrArray, radiusOrArray, radiusOrArray, radiusOrArray].map((r, i) => Math.max(
+			0,
+			Math.min(r - offsets[i], Math.min(width, height) * 0.5)
+		))
+	}
 
 	let path
 
