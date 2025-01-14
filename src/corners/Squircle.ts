@@ -116,8 +116,7 @@ export function createPath({
 		radius,
 		smoothing,
 		preserveSmoothing,
-		// Math.min(width, height) * 0.5
-		radius
+		Math.max(radius, Math.min(width, height) * 0.5)
 	))
 
 	return [
