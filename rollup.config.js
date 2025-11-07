@@ -47,7 +47,7 @@ export default [
 	},
 	{
 		input: [
-			'src/index.ts'
+			'./src/index.ts'
 		],
 		output: [
 			{

@@ -124,8 +124,8 @@ export default new class ElementManager {
 
 	unobserve(element:HTMLElement) {
 		const funk = (el:HTMLElement) => {
-			this.observer?.unobserve(element)
-			this.elements?.delete(element)
+			this.observer?.unobserve(el)
+			this.elements?.delete(el)
 		}
 
 		if (element) {

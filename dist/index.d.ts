@@ -77,4 +77,5 @@ interface PathOptions extends DrawOptions {
 declare function draw(element?: HTMLElement, options?: CornerOptions): void;
 declare function unobserve(element: HTMLElement): void;
 
-export { type CornerOptions, type CornerTypeOptions, createPath$5 as FigmaSquircle, createPath$4 as Flat, createPath$3 as Inset, type PathOptions, createPath$2 as Round, createPath$1 as RoundInverse, createPath as Squircle, addCorners, createPath$6 as createPath, draw, unobserve };
+export { createPath$5 as FigmaSquircle, createPath$4 as Flat, createPath$3 as Inset, createPath$2 as Round, createPath$1 as RoundInverse, createPath as Squircle, addCorners, createPath$6 as createPath, draw, unobserve };
+export type { CornerOptions, CornerTypeOptions, PathOptions };

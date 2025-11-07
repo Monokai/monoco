@@ -1,6 +1,6 @@
 {
   "name": "@monokai/monoco",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": "Monokai",
   "license": "MIT",
   "description": "Custom (squircle) corners and borders for html elements",
@@ -35,26 +35,21 @@
   "scripts": {
     "build": "rollup -c",
     "build:production": "rollup -c --environment BUILD:production",
-    "watch": "rollup src/index.ts --format umd --name monoco --watch --output.file=dist/umd/index.js"
+    "watch": "rollup -c --watch"
   },
   "devDependencies": {
-    "@clarifynl/eslint-config-clarify": "^0.14.0",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@eslint/js": "^9.39.1",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "rollup": "^4.28.1",
-    "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-dts": "^6.1.1",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "rollup": "^4.52.5",
+    "rollup-plugin-delete": "^3.0.1",
+    "rollup-plugin-dts": "^6.2.3",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@clarifynl/clarify"
-    ],
-    "rules": {
-      "import/extensions": 0
-    }
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.3"
   }
 }
