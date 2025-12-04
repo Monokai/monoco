@@ -1,4 +1,4 @@
-export function createPath({
+export const createPath = ({
 	width,
 	height,
 	radii,
@@ -8,7 +8,7 @@ export function createPath({
 	height:number,
 	radii:number[],
 	offsets:number[]
-}) {
+}) => {
 	const [ot,,, ol] = offsets
 	const [rtl, rtr, rbr, rbl] = radii
 

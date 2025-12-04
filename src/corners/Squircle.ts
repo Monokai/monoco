@@ -84,17 +84,27 @@ function createSquircleCorner(
 	l:number[]
 ) {
 	if (radius) {
-		return [
-			...[smoothing ? ['c', ...c1] : []],
-			...[arcLength ? ['a', radius, radius, 0, 0, sweepFlag, ...arcMultiplier.map(x => x * arcLength)] : []],
-			...[smoothing ? ['c', ...c2] : []],
-		]
+		const result: (string|number)[][] = []
+
+		if (smoothing) {
+			result.push(['c', ...c1])
+		}
+
+		if (arcLength) {
+			result.push(['a', radius, radius, 0, 0, sweepFlag, ...arcMultiplier.map(x => x * arcLength)])
+		}
+
+		if (smoothing) {
+			result.push(['c', ...c2])
+		}
+
+		return result
 	}
 
 	return [['l', ...l]]
 }
 
-export function createPath({
+export const createPath = ({
 	width,
 	height,
 	radii,
@@ -110,7 +120,7 @@ export function createPath({
 	smoothing?:number,
 	preserveSmoothing?:boolean,
 	sweepFlag?:number
-}) {
+}) => {
 	const [ot,,, ol] = offsets
 	const [c1, c2, c3, c4] = radii.map(radius => getSquircleCorner(
 		radius,

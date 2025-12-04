@@ -10,11 +10,13 @@ export { createPath as Round } from './corners/Round'
 export { createPath as RoundInverse } from './corners/RoundInverse'
 export { createPath as Squircle } from './corners/Squircle'
 
+export type { ResizeDetail } from './utils/ElementManager'
+
 export interface CornerOptions extends BackgroundOptions, ElementOptions {}
 
 export interface CornerTypeOptions extends DefaultCornerTypeOptions {
 	// allow any key / value combinations in addition to the default corner type options
-	[_: string | number | symbol]: unknown;
+	[_: string | number | symbol]: unknown
 }
 
 interface DrawOptions {

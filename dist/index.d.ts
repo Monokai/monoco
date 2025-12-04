@@ -1,17 +1,21 @@
 interface RedrawOptions {
-    width?: number;
-    height?: number;
+    width: number;
+    height: number;
+}
+interface ResizeDetail {
+    width: number;
+    height: number;
 }
 interface ElementOptions {
     observe?: boolean;
-    onResize?: (rect?: DOMRect, element?: HTMLElement) => void;
+    onResize?: (size: ResizeDetail, element: HTMLElement) => void;
 }
 
 interface BackgroundOptions extends PathOptions {
     background?: string;
-    border?: [number, string] | [number, string][];
+    border?: [number, string] | [number, string][] | [number, number, string[]] | [number, number, string[]][];
     strokeDrawType?: number;
-    clipID?: string;
+    idPrefix?: string;
     clip?: boolean;
 }
 interface DefaultCornerTypeOptions {
@@ -20,32 +24,32 @@ interface DefaultCornerTypeOptions {
     radii: number[];
     offsets: number[];
 }
-declare function createPath$6({ width: w, height: h, borderRadius: radiusOrArray, offset: offsetOrArray, smoothing, cornerType, precision, isArray }: PathOptions): string | (string | (string | number | (string | number)[])[])[];
+declare function createPath$6({ width: w, height: h, borderRadius: radiusOrArray, offset: offsetOrArray, smoothing, cornerType, precision, isArray }: PathOptions): string | (string | number)[][];
 declare function addCorners(element: HTMLElement, cornerOptions: CornerOptions): (redrawOptions?: RedrawOptions) => void;
 
-declare function createPath$5(options: DefaultCornerTypeOptions & {
+declare const createPath$5: (options: DefaultCornerTypeOptions & {
     smoothing?: number;
-}): (string | number)[][];
+}) => (string | number)[][];
 
-declare function createPath$4({ width, height, radii, offsets }: {
+declare const createPath$4: ({ width, height, radii, offsets }: {
     width: number;
     height: number;
     radii: number[];
     offsets: number[];
-}): (string | number)[][];
+}) => (string | number)[][];
 
-declare function createPath$3({ width, height, radii, offsets }: {
+declare const createPath$3: ({ width, height, radii, offsets }: {
     width: number;
     height: number;
     radii: number[];
     offsets: number[];
-}): (string | number)[][];
+}) => (string | number)[][];
 
-declare function createPath$2(options: DefaultCornerTypeOptions): (string | number)[][];
+declare const createPath$2: (options: DefaultCornerTypeOptions) => (string | number)[][];
 
-declare function createPath$1(options: DefaultCornerTypeOptions): (string | number)[][];
+declare const createPath$1: (options: DefaultCornerTypeOptions) => (string | number)[][];
 
-declare function createPath({ width, height, radii, offsets, smoothing, preserveSmoothing, sweepFlag }: {
+declare const createPath: ({ width, height, radii, offsets, smoothing, preserveSmoothing, sweepFlag }: {
     width: number;
     height: number;
     radii: number[];
@@ -53,7 +57,7 @@ declare function createPath({ width, height, radii, offsets, smoothing, preserve
     smoothing?: number;
     preserveSmoothing?: boolean;
     sweepFlag?: number;
-}): (string | number)[][];
+}) => (string | number)[][];
 
 interface CornerOptions extends BackgroundOptions, ElementOptions {
 }
@@ -78,4 +82,4 @@ declare function draw(element?: HTMLElement, options?: CornerOptions): void;
 declare function unobserve(element: HTMLElement): void;
 
 export { createPath$5 as FigmaSquircle, createPath$4 as Flat, createPath$3 as Inset, createPath$2 as Round, createPath$1 as RoundInverse, createPath as Squircle, addCorners, createPath$6 as createPath, draw, unobserve };
-export type { CornerOptions, CornerTypeOptions, PathOptions };
+export type { CornerOptions, CornerTypeOptions, PathOptions, ResizeDetail };

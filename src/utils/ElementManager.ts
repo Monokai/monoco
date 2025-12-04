@@ -1,14 +1,19 @@
 import { CornerOptions } from ".."
 
 export interface RedrawOptions {
-	width?:number,
-	height?:number
+	width:number,
+	height:number
+}
+
+export interface ResizeDetail {
+	width: number,
+	height: number
 }
 
 interface ElementSpecs {
 	draw: (redrawOptions?:RedrawOptions) => void,
 	cornerOptions: CornerOptions,
-	onResize?: (rect?:DOMRect, element?:HTMLElement) => void,
+	onResize?: (size: ResizeDetail, element:HTMLElement) => void,
 	previousW: number | null,
 	previousH: number | null,
 	element: HTMLElement
@@ -16,12 +21,17 @@ interface ElementSpecs {
 
 export interface ElementOptions {
 	observe?:boolean,
-	onResize?:(rect?:DOMRect, element?:HTMLElement) => void
+	onResize?:(size:ResizeDetail, element:HTMLElement) => void
 }
 
 export default new class ElementManager {
 	elements:Map<HTMLElement, ElementSpecs> | null
 	observer:ResizeObserver | null
+
+	rafID: number | null = null
+	queue: ResizeObserverEntry[] = []
+
+	public resizePrecisionPower = 10 ** 0
 
 	constructor() {
 		this.elements = null
@@ -29,12 +39,40 @@ export default new class ElementManager {
 	}
 
 	onElementResize(resizeList:ResizeObserverEntry[]) {
-		for (const entry of resizeList) {
-			const rect = entry.target.getBoundingClientRect()
-			const specs = this.elements?.get(entry.target as HTMLElement)
+		this.queue.push(...resizeList)
+
+		if (!this.rafID) {
+			this.rafID = requestAnimationFrame(() => this.flushQueue())
+		}
+	}
+
+	flushQueue() {
+		const uniqueUpdates = new Map<HTMLElement, ResizeObserverEntry>()
+
+		for (const entry of this.queue) {
+			uniqueUpdates.set(entry.target as HTMLElement, entry)
+		}
+
+		this.queue = []
+
+		uniqueUpdates.forEach((entry, element) => {
+			if (!element.isConnected) {
+				this.unobserve(element);
+
+				return;
+			}
+
+			const specs = this.elements?.get(element)
 
 			if (!specs) {
-				continue
+				return
+			}
+
+			let { width, height } = entry.contentRect
+
+			if (specs.cornerOptions.isRounded) {
+				width = Math.round(width)
+				height = Math.round(height)
 			}
 
 			const {
@@ -45,33 +83,33 @@ export default new class ElementManager {
 			} = specs
 
 			if (
-				previousW !== rect.width ||
-				previousH !== rect.height
+				previousW !== width ||
+				previousH !== height
 			) {
 				draw?.({
-					width: rect.width,
-					height: rect.height
+					width,
+					height
 				})
 
-				onResize?.(rect, entry.target as HTMLElement)
+				onResize?.({width, height}, entry.target as HTMLElement)
 
-				specs.previousW = rect.width
-				specs.previousH = rect.height
+				specs.previousW = width
+				specs.previousH = height
 			}
-		}
+		})
+
+		this.rafID = null
 	}
 
-	getDrawOptions(element:HTMLElement):CornerOptions | null {
-		return this.elements?.get(element)?.cornerOptions ?? null;
-	}
+	getDrawOptions = (element:HTMLElement):CornerOptions | null => this.elements?.get(element)?.cornerOptions ?? null
 
 	setCornerOptions(element:HTMLElement, cornerOptions:CornerOptions) {
-		const specs = this.elements?.get(element);
+		const specs = this.elements?.get(element)
 
 		if (specs) {
-			specs.cornerOptions = cornerOptions;
+			specs.cornerOptions = cornerOptions
 
-			this.elements?.set(element, specs);
+			this.elements?.set(element, specs)
 		}
 	}
 
@@ -92,8 +130,6 @@ export default new class ElementManager {
 		} = cornerOptions
 
 		if (observe) {
-			this.observer.observe(element)
-
 			const previousW = null
 			const previousH = null
 
@@ -105,6 +141,8 @@ export default new class ElementManager {
 				previousH,
 				element
 			})
+
+			this.observer.observe(element)
 		}
 
 		return draw

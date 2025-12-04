@@ -74,7 +74,11 @@
 					clip: isClipped,
 					background: '#888',
 					borderRadius: [lerp(32, 64, factor), lerp(16, 48, factor), lerp(2, 80, factor), lerp(128, 2, factor)],
-					border: isClipped ? undefined : [[lerp(4, 16, factor) , '#f48'], [lerp(16, 8, factor), '#48f'], [lerp(16, 4, factor), '#3f8']],
+					border: i === 3
+						? [[16, 0, ['#f00', '#00f']], [5, 0, ['#00f', '#f00']]]
+						: isClipped
+							? undefined
+							: [[lerp(4, 16, factor) , '#f48'], [lerp(16, 8, factor), '#48f'], [lerp(16, 4, factor), '#3f8']],
 					cornerType: [Squircle, FigmaSquircle, Round, Flat][i % 4]
 				});
 			});

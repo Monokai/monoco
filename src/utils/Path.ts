@@ -2,15 +2,17 @@ import type { CornerOptions } from '..'
 import type { RedrawOptions } from './ElementManager'
 
 import ElementManager from './ElementManager'
+import { createGradient } from './LinearGradient'
 import { createPath as Squircle } from '../corners/Squircle'
 import { createSVGDatURI } from './Svg'
 import { PathOptions } from '..'
+import { fix } from '../utils/FixNumber'
 
 export interface BackgroundOptions extends PathOptions {
 	background?:string,
-	border?:[number, string] | [number, string][],
+	border?:[number, string] | [number, string][] | [number, number, string[]] | [number, number, string[]][],
 	strokeDrawType?:number
-	clipID?:string,
+	idPrefix?:string,
 	clip?:boolean
 }
 
@@ -28,9 +30,10 @@ function createBackground(options:BackgroundOptions) {
 		strokeDrawType = 0,
 		background,
 		clip,
-		clipID,
+		idPrefix = 'm',
 		width,
-		height
+		height,
+		precision = 3
 	} = options
 
 	const paths:string[] = []
@@ -38,23 +41,53 @@ function createBackground(options:BackgroundOptions) {
 	const offsetArray = Array.isArray(offsetOrArray) ? offsetOrArray : [offsetOrArray, offsetOrArray, offsetOrArray, offsetOrArray]
 	const clipPath = clip ? null : createPath(options)
 
+	let gradients:string[] | undefined
+
 	if (borderArray?.length) {
 		let totalBorderRadius = 0
 
 		const borderPaths:string[] = []
 
 		for (let i = 0; i < borderArray.length; i++) {
-			const [size, borderColor] = borderArray[i] as [number, string]
+			if (typeof (borderArray[i] as [number, string | number])[1] === 'number') {
+				const [size, angle, borderColors] = borderArray[i] as [number, number, string[]]
 
-			const strokeWidth = strokeDrawType === 0 ? (totalBorderRadius + size) * 2 : size
+				if (size) {
+					const gradientID = `${idPrefix}g${i}`
 
-			if (size) {
-				borderPaths.push(`<path d="${createPath({
-					...options,
-					offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + totalBorderRadius + size * 0.5)
-				})}" fill="none" stroke="${borderColor}" stroke-width="${strokeWidth}" />`)
+					if (!gradients) {
+						gradients = []
+					}
 
-				totalBorderRadius += size
+					gradients.push(createGradient({
+						id: gradientID,
+						angle,
+						colors: borderColors,
+						precision
+					}))
+
+					const strokeWidth = strokeDrawType === 0 ? (totalBorderRadius + size) * 2 : size
+
+					borderPaths.push(`<path d="${createPath({
+						...options,
+						offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + totalBorderRadius + size * 0.5)
+					})}" fill="none" stroke="url(#${gradientID})" stroke-width="${strokeWidth}" />`)
+
+					totalBorderRadius += size
+				}
+			} else {
+				const [size, borderColor] = borderArray[i] as [number, string]
+
+				if (size) {
+					const strokeWidth = strokeDrawType === 0 ? (totalBorderRadius + size) * 2 : size
+
+					borderPaths.push(`<path d="${createPath({
+						...options,
+						offset: strokeDrawType === 0 ? offsetOrArray : offsetArray.map(o => o + totalBorderRadius + size * 0.5)
+					})}" fill="none" stroke="${borderColor}" stroke-width="${strokeWidth}" />`)
+
+					totalBorderRadius += size
+				}
 			}
 		}
 
@@ -69,7 +102,12 @@ function createBackground(options:BackgroundOptions) {
 		paths.push(...borderPaths.reverse())
 	}
 
-	return paths.length ? createSVGDatURI(paths, clipPath as string, clipID) : 'none'
+	return paths.length ? createSVGDatURI({
+		paths,
+		clipPath: clipPath as string,
+		gradients,
+		idPrefix
+	}) : 'none'
 }
 
 export function createPath({
@@ -91,7 +129,7 @@ export function createPath({
 	const width = w - ol - or
 	const height = h - ot - ob
 
-	let radii;
+	let radii
 
 	if (Array.isArray(radiusOrArray)) {
 		// https://drafts.csswg.org/css-backgrounds/#corner-overlap
@@ -99,9 +137,9 @@ export function createPath({
 		const f = Math.min(...sides.map((s, i) => (i % 2 === 0 ? width : height) / s))
 
 		if (f < 1) {
-			radii = radiusOrArray.map(r => r * f);
+			radii = radiusOrArray.map(r => r * f)
 		} else {
-			radii = radiusOrArray;
+			radii = radiusOrArray
 		}
 	} else {
 		radii = [radiusOrArray, radiusOrArray, radiusOrArray, radiusOrArray].map((r, i) => Math.max(
@@ -110,10 +148,10 @@ export function createPath({
 		))
 	}
 
-	let path
+	let pathData
 
 	if (cornerType) {
-		path = cornerType({
+		pathData = cornerType({
 			width,
 			height,
 			radii,
@@ -121,22 +159,36 @@ export function createPath({
 			smoothing
 		})
 	} else {
-		path = [[]]
+		pathData = [[]]
 	}
 
-	path = path
-		.filter(instructions => instructions[0])
-		.map(([command, ...parameters]) => {
-			const p = parameters.map(x => Number.isFinite(x) ? Number((x as number).toFixed(precision)) : x)
-			const result = [
-				command,
-				isArray ? p : p.join(' ')
-			]
+	const round = fix(precision)
 
-			return isArray ? result : result.join('')
-		})
+	if (isArray) {
+		return pathData
+			.filter(cmd => cmd[0])
+			.map(([cmd, ...params]) => [cmd, ...params.map(p => typeof p === 'number' ? round(p) : p)])
+	}
 
-	return isArray ? path : path.join('')
+	let d = ''
+
+	for (let i = 0; i < pathData.length; i++) {
+		const cmd = pathData[i]
+
+		if (!cmd[0]) {
+			continue
+		}
+
+		d += cmd[0]
+
+		for (let j = 1; j < cmd.length; j++) {
+			const val = cmd[j]
+
+			d += (typeof val === 'number' ? round(val) : val) + ' '
+		}
+	}
+
+	return d.trim()
 }
 
 export function addCorners(element:HTMLElement, cornerOptions:CornerOptions) {
@@ -144,14 +196,6 @@ export function addCorners(element:HTMLElement, cornerOptions:CornerOptions) {
 
 	const drawFunk = (redrawOptions?:RedrawOptions) => {
 		const options = ElementManager.getDrawOptions(element) ?? {} as CornerOptions
-
-		if (!(options.width && options.height)) {
-			const rect = element.getBoundingClientRect()
-
-			options.width = rect.width
-			options.height = rect.height
-		}
-
 		const combinedOptions = {...options, ...redrawOptions}
 
 		if (combinedOptions.isRounded) {
@@ -159,10 +203,12 @@ export function addCorners(element:HTMLElement, cornerOptions:CornerOptions) {
 			combinedOptions.height = combinedOptions.height ? Math.round(combinedOptions.height) : undefined
 		}
 
-		element.style.clipPath = options.clip ? `path('${createPath(combinedOptions)}')` : ''
+		if (combinedOptions.width && combinedOptions.height) {
+			element.style.clipPath = options.clip ? `path('${createPath(combinedOptions)}')` : ''
 
-		if (options.background || options.border) {
-			element.style.backgroundImage = createBackground(combinedOptions)
+			if (options.background || options.border) {
+				element.style.backgroundImage = createBackground(combinedOptions)
+			}
 		}
 	}
 

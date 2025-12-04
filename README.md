@@ -16,18 +16,18 @@ npm install @monokai/monoco
 
 | Option | Type | Description |
 | --- | --- | --- |
-| background | string | background color |
+| background | string | Background color |
 | smoothing | number | Smoothing factor of the corners (between 0 and 1, default: 1) |
 | borderRadius | number \| number[] | Radius of the corners, or array [top left, top right, bottom right, bottom left] |
 | offset | number \| number[] | Offset of the corners, or array [top, right, bottom, left] |
-| border | [number, string][] | Border of the corners, or array of borders |
-| cornerType | {width:number, height:number, radii:number[], offsets:number[]} => (string\|number)[][] | Corner type (default: Squircle) |
+| border | [number, string] \| [number, string][] \| [number, number, string[]] \| [number, number, string[]][] \| BBorder size and color (or gradient) of the corners. Can be a single tuple or array of tuples. |
+| cornerType | {width:number, height:number, radii:number[], offsets:number[]} => (string\|number)[][] | Corner type function (default: Squircle) |
 | clip | boolean | Use clip-path on element |
 | width | number | Width of the element (default: auto) |
 | height | number | Height of the element (default: auto) |
 | observe | boolean | Observe element for resize (default: true) |
-| onResize | (rect:DOMRect, element:HTMLElement) => void | Callback when element resizes |
-| precision | number | Precision of the path (default: 3) |
+| onResize | ({width: number, height: number}, element:HTMLElement) => void | Callback when element resizes |
+| precision | number | Precision of the path decimal points (default: 3) |
 | isRounded | boolean | Use rounded values for width and height (default: false)
 
 ## Notes
@@ -120,6 +120,25 @@ addCorners(element, {
     [2, '#0f0'],
     [8, '#00f'],
     [16, '#ff0']
+  ]
+})
+
+// border gradient
+addCorners(element, {
+  background: '#f00',
+  smoothing: 1,
+  borderRadius: 32,
+  border: [4, 45, ['#f00', '#00f']]
+})
+
+// multi-border gradient with offsets
+addCorners(element, {
+  background: '#f00',
+  smoothing: 1,
+  borderRadius: 32,
+  border: [
+    [4, 45, ['#f00', '#0f0 0.2', '#00f']],
+    [4, 90, ['#f00', '#0f0 0.4', '#00f 50%', '#fff']]
   ]
 })
 

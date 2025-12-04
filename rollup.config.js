@@ -14,7 +14,18 @@ const plugins = [
 		compress: {
 			drop_console: true,
 			passes: 2
-		}
+		},
+		mangle: {
+			keep_fnames: true,
+			properties: {
+				debug: true,
+				// we force mangling of properties starting with an underscore
+				regex: /^_[^_]/,
+				reserved: [
+					'monoco'
+				]
+			},
+		},
 	})
 ]
 
