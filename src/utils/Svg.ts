@@ -1,4 +1,4 @@
-const ENCODE_REGEX = /[\r\n"%#()<>?[\\\]^`{|}\s']/g;
+const ENCODE_REGEX = /[\r\n"%#()<>?[\\\]^`{|}\s']/g
 
 const ESCAPE_MAP: Record<string, string> = {
 	'\r': '',

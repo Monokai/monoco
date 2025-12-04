@@ -57,9 +57,9 @@ export default new class ElementManager {
 
 		uniqueUpdates.forEach((entry, element) => {
 			if (!element.isConnected) {
-				this.unobserve(element);
+				this.unobserve(element)
 
-				return;
+				return
 			}
 
 			const specs = this.elements?.get(element)
@@ -68,7 +68,10 @@ export default new class ElementManager {
 				return
 			}
 
-			let { width, height } = entry.contentRect
+			let {
+				inlineSize: width,
+				blockSize: height
+			} = entry.borderBoxSize[0]
 
 			if (specs.cornerOptions.isRounded) {
 				width = Math.round(width)
