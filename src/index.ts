@@ -43,6 +43,6 @@ export function draw(element?:HTMLElement, options?:CornerOptions) {
 	ElementManager.draw(element, options)
 }
 
-export function unobserve(element:HTMLElement) {
+export function unobserve(element?:HTMLElement) {
 	ElementManager.unobserve(element)
 }

@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ElementManager from './utils/ElementManager';
 import { createGradient } from './utils/LinearGradient';
 import {
+	draw,
 	createPath,
 	addCorners,
 	unobserve,
@@ -212,7 +213,7 @@ describe('test suite', () => {
 				colors: ['red', 'green', 'blue'],
 				precision: 2
 			});
-			
+
 			expect(svg).toContain('stop offset="0" stop-color="red"');
 			expect(svg).toContain('stop offset="0.5" stop-color="green"');
 			expect(svg).toContain('stop offset="1" stop-color="blue"');
@@ -225,7 +226,7 @@ describe('test suite', () => {
 				colors: ['red', 'white', 'black 75%', 'blue'],
 				precision: 3
 			});
-			
+
 			expect(svg).toContain('offset="0" stop-color="red"');
 			expect(svg).toContain('offset="0.375" stop-color="white"');
 			expect(svg).toContain('offset="0.75" stop-color="black"');
@@ -289,18 +290,18 @@ describe('test suite', () => {
 		});
 
 		it('should generate gradient definitions within the data URI when border has gradient', async () => {
-			addCorners(div, { 
-				borderRadius: 10, 
-				border: [5, 45, ['#f00', '#00f']] 
+			addCorners(div, {
+				borderRadius: 10,
+				border: [5, 45, ['#f00', '#00f']]
 			});
 
 			await nextFrame();
 
 			const bgImage = div.style.backgroundImage;
 			expect(bgImage).toContain('data:image/svg+xml');
-			
+
 			const decoded = decodeURIComponent(bgImage);
-			
+
 			expect(decoded).toContain('<linearGradient');
 			expect(decoded).toContain('stop-color="#f00"');
 			expect(decoded).toContain('stop-color="#00f"');
@@ -369,6 +370,85 @@ describe('test suite', () => {
 			expect(bgImage).toContain('data:image/svg+xml');
 			expect(bgImage).not.toContain('<');
 			expect(bgImage).toContain('%3C');
+		});
+	});
+
+	describe('manual draw', () => {
+		let div: HTMLDivElement;
+
+		beforeEach(() => {
+			document.body.innerHTML = '';
+			div = document.createElement('div');
+			div.style.width = '100px';
+			div.style.height = '100px';
+			document.body.appendChild(div);
+			ResizeObserverMock.mockClear();
+		});
+
+		afterEach(() => {
+			unobserve(div);
+			vi.restoreAllMocks();
+		});
+
+		it('should draw immediately using DOM dimensions if cache is empty', () => {
+			const wSpy = vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(100);
+			const hSpy = vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(100);
+
+			addCorners(div, { borderRadius: 10, clip: true });
+
+			const styleSpy = vi.spyOn(div.style, 'clipPath', 'set');
+
+			draw(div);
+
+			expect(wSpy).toHaveBeenCalled();
+			expect(hSpy).toHaveBeenCalled();
+			expect(styleSpy).toHaveBeenCalled();
+			expect(div.style.clipPath).toContain('path');
+		});
+
+		it('should use cached dimensions and avoid DOM read if available', async () => {
+			addCorners(div, { borderRadius: 10 });
+
+			await nextFrame();
+
+			const wSpy = vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(500);
+			const hSpy = vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(500);
+
+			draw(div);
+
+			expect(wSpy).not.toHaveBeenCalled();
+			expect(hSpy).not.toHaveBeenCalled();
+		});
+
+		it('should update options when provided to draw', async () => {
+			addCorners(div, { borderRadius: 10 });
+			await nextFrame();
+
+			const initialPath = div.style.clipPath;
+
+			draw(div, { borderRadius: 50, clip: true });
+
+			expect(div.style.clipPath).not.toBe(initialPath);
+			expect(div.style.clipPath).toContain('path');
+		});
+
+		it('should draw all elements if no element provided', async () => {
+			const div2 = document.createElement('div');
+			div2.style.width = '50px';
+			div2.style.height = '50px';
+			document.body.appendChild(div2);
+
+			addCorners(div, { borderRadius: 10 });
+			addCorners(div2, { borderRadius: 10 });
+			await nextFrame();
+
+			const s1 = vi.spyOn(div.style, 'clipPath', 'set');
+			const s2 = vi.spyOn(div2.style, 'clipPath', 'set');
+
+			draw();
+
+			expect(s1).toHaveBeenCalled();
+			expect(s2).toHaveBeenCalled();
 		});
 	});
 });

@@ -149,18 +149,40 @@ export default new class ElementManager {
 	}
 
 	draw(element?:HTMLElement, cornerOptions?:CornerOptions) {
+		const run = (specs: ElementSpecs) => {
+			if (!specs.element.isConnected) {
+				return
+			}
+
+			let { previousW: width, previousH: height } = specs
+
+			if (width === null || height === null) {
+				width = specs.element.offsetWidth
+				height = specs.element.offsetHeight
+
+				specs.previousW = width
+				specs.previousH = height
+			}
+
+			specs.draw?.({ width, height })
+		}
+
 		if (element) {
 			if (cornerOptions) {
 				this.setCornerOptions(element, cornerOptions)
 			}
 
-			this.elements?.get(element)?.draw?.()
+			const specs = this.elements?.get(element)
+
+			if (specs) {
+				run(specs)
+			}
 		} else {
-			this.elements?.forEach((o:ElementSpecs) => o.draw?.())
+			this.elements?.forEach(run)
 		}
 	}
 
-	unobserve(element:HTMLElement) {
+	unobserve(element?:HTMLElement) {
 		const funk = (el:HTMLElement) => {
 			this.observer?.unobserve(el)
 			this.elements?.delete(el)

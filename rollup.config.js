@@ -12,7 +12,7 @@ const plugins = [
 	typescript(),
 	terser({
 		compress: {
-			drop_console: true,
+			// drop_console: true,
 			passes: 2
 		},
 		mangle: {
