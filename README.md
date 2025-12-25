@@ -20,7 +20,7 @@ npm install @monokai/monoco
 | smoothing | number | Smoothing factor of the corners (between 0 and 1, default: 1) |
 | borderRadius | number \| number[] | Radius of the corners, or array [top left, top right, bottom right, bottom left] |
 | offset | number \| number[] | Offset of the corners, or array [top, right, bottom, left] |
-| border | [number, string] \| [number, string][] \| [number, number, string[]] \| [number, number, string[]][] \| BBorder size and color (or gradient) of the corners. Can be a single tuple or array of tuples. |
+| border | [number, string] \| [number, string][] \| [number, number, string[]] \| [number, number, string[]][] | Border [size, color] or [size, angle, [color-stop1, color-stop2, …]]. Can be a single tuple or array of tuples. |
 | cornerType | {width:number, height:number, radii:number[], offsets:number[]} => (string\|number)[][] | Corner type function (default: Squircle) |
 | clip | boolean | Use clip-path on element |
 | width | number | Width of the element (default: auto) |
